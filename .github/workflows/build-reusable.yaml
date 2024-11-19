@@ -50,7 +50,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ macos-latest, ubuntu-latest, windows-latest ]
+        os: [ ubuntu-latest ]
 
     steps:
 
@@ -119,6 +119,16 @@ jobs:
           path: |
             **/target/surefire-reports
             **/target/logs
+
+      - name: Upload JAR
+        if: always()
+        uses: actions/upload-artifact@50769540e7f4bd5e21e526ee35c689e35e0d6874   # 4.4.0
+        with:
+          name: jar-${{matrix.os}}-${{github.run_number}}-${{github.run_attempt}}
+          path: |
+            log4j-api/target/*.jar
+            log4j-core/target/*.jar
+            log4j-slf4j-impl/target/*.jar
 
       - name: Clean up Develocity
         if: inputs.develocity-enabled
